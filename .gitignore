@@ -1,0 +1,26 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### IDE ###
+.idea
+*.iws
+*.iml
+*.ipr
+.vscode/
+.classpath
+.project
+.settings
+
+### Variables de entorno y secretos ###
+.env
+*.pem
+*.p12
+application-local.yml
+application-secrets.yml
+
+### Sistema operativo ###
+.DS_Store
+Thumbs.db

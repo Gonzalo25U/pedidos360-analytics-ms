@@ -1,0 +1,52 @@
+server:
+  port: ${SERVER_PORT:8086}
+
+spring:
+  application:
+    name: analytics-ms
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: analytics-group
+      # Si el grupo es nuevo (sin offset guardado) empieza desde el primer mensaje.
+      # Si el consumidor estuvo caido, retoma desde su ultimo offset confirmado.
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      missing-topics-fatal: false
+      concurrency: 3   # = numero de particiones de clickstream-eventos
+
+aws:
+  region: ${AWS_REGION:us-east-1}
+
+dynamodb:
+  tabla-eventos: ${DYNAMO_TABLA_EVENTOS:ClickstreamEventos}
+  tabla-productos: ${DYNAMO_TABLA_PRODUCTOS:ProductoMetricas}
+  tabla-afinidad: ${DYNAMO_TABLA_AFINIDAD:UsuarioProducto}
+  tabla-coocurrencia: ${DYNAMO_TABLA_COOCURRENCIA:Coocurrencia}
+
+clickstream:
+  topic: ${CLICKSTREAM_TOPIC:clickstream-eventos}
+
+cors:
+  allowed-origins: ${FRONTEND_URL:http://localhost:4200}
+
+logging:
+  level:
+    org.springframework.security: INFO
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "!local"
+
+azure:
+  client-id: ${AZURE_CLIENT_ID}
+  audience: ${AZURE_API_AUDIENCE:api://${AZURE_CLIENT_ID}}
+
+cognito:
+  issuer: ${COGNITO_ISSUER}
+  client-id: ${COGNITO_CLIENT_ID}
